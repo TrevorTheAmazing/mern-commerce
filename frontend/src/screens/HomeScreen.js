@@ -1,9 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
-import products from '../products'
+//component level state from 'react' instead
+// import products from '../products'
 import Product from '../components/Product'
+import axios from 'axios'
 
 const HomeScreen = () => {
+    const [products, setProducts] = useState([])
+
+    useEffect(() => {
+        //this happens as soon as the component loads
+        //console.log('hello')
+        
+        const fetchProducts = async () => {
+            //use destructuring to access the 'data' variable directly
+            const { data } = await axios.get('/api/products')
+
+            setProducts(data);
+        }
+
+        fetchProducts()
+        
+    }, [])
+
+
     return (
         <>
             <h1>Latest Junk</h1>
