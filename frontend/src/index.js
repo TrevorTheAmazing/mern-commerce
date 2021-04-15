@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import store from './store.js'
+//import store from './store.js'
+import store from './store'
 import './bootstrap.min.css'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
   //use store provider instead of React.StrictMode
