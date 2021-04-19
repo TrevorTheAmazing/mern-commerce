@@ -4,7 +4,7 @@ import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } 
 export const login = (email, password) => async (dispatch) => {
     try {
         dispatch({
-            type: USER_LOGIN_REQUEST    
+            type: USER_LOGIN_REQUEST,    
         })
 
         const config = {
@@ -13,7 +13,7 @@ export const login = (email, password) => async (dispatch) => {
             }
         }
 
-        const { data } = await axios.get('/api/users/login', { email, password }, config)
+        const { data } = await axios.post('/api/users/login', { email, password }, config)
 
 
         dispatch({
