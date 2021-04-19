@@ -31,23 +31,13 @@ export const login = (email, password) => async (dispatch) => {
     }
 }
 
-// export const addToCart = (id, qty) => async (dispatch, getState) => {
-//     const { data } = await axios.get(`/api/products/${id}`)
+export const logout = () => (dispatch) => {
+    
+    localStorage.removeItem('userInfo')
 
-//     dispatch({
-//         type: USER_LOGIN_FAIL,
-//         payload: {
-//             // product: data._id,
-//             // name: data.name, 
-//             // image: data.image,
-//             // price: data.price,
-//             // countInStock: data.countInStock,
-//             // qty,
-//         },
-//     })
+    dispatch({ type: USER_LOGOUT })
 
-//     //localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
-// }
+}
 
 // export const addToCart = (id, qty) => async (dispatch, getState) => {
 //     const { data } = await axios.get(`/api/products/${id}`)
