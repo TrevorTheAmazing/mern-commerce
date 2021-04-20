@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from '../constants/userConstants'
+import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/userConstants'
 
 export const login = (email, password) => async (dispatch) => {
     try {
@@ -74,30 +74,33 @@ export const register = (name, email, password) => async (dispatch) => {
     }
 }
 
-// export const addToCart = (id, qty) => async (dispatch, getState) => {
-//     const { data } = await axios.get(`/api/products/${id}`)
+export const getUserDetails = (id) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_DETAILS_REQUEST,    
+        })
 
-//     dispatch({
-//         type: USER_LOGOUT,
-//         payload: {
-//             // product: data._id,
-//             // name: data.name, 
-//             // image: data.image,
-//             // price: data.price,
-//             // countInStock: data.countInStock,
-//             // qty,
-//         },
-//     })
+        const { userLogin: { userInfo } } = getState()
 
-//     //localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
-// }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(`/api/users/${id}`, config)
 
 
-// export const removeFromCart = (id) => (dispatch, getState) => {
-//     dispatch({
-//         type: CART_REMOVE_ITEM,
-//         payload: id
-//     })
+        dispatch({
+            type: USER_DETAILS_SUCCESS,
+            payload: data
+        })
 
-//     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
-// }
+    } catch (error) {
+        dispatch({
+            type: USER_DETAILS_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        })
+    }
+}
