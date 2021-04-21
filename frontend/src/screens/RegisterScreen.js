@@ -45,7 +45,7 @@ useEffect(() => {
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='name'>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control type='anme' placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)}>
+                    <Form.Control type='name' placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)}>
 
                     </Form.Control>
                 </Form.Group>
