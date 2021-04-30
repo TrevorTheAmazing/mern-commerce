@@ -12,16 +12,7 @@ const addOrderItems = asyncHandler(async(req, res) => {
         throw new Error('No order items')
         return
     } else {
-        const order = new Order({
-            orderItems, 
-            user: req.user._id,
-            shippingAddress, 
-            paymentMethod, 
-            itemsPrice, 
-            taxPrice, 
-            shippingPrice, 
-            totalPrice,
-        })
+        const order = new Order({ orderItems, user: req.user._id, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice })
 
         const createdOrder = await order.save()
 
@@ -30,7 +21,7 @@ const addOrderItems = asyncHandler(async(req, res) => {
 })
 
 //  @desc   Get order by id
-//  @route  GET /api/orders
+//  @route  GET /api/orders/:id
 //  @access protected
 const getOrderById = asyncHandler(async(req, res) => {
     const order = await Order.findById(req.params.id).populate('user', 'name email')
@@ -67,28 +58,38 @@ const updateOrderPaidStatus = asyncHandler(async(req, res) => {
     }
 })
 
+//  @desc   Update 'paid' status
+//  @route  GET /api/orders/:id/pay
+//  @access protected
+const updateOrderDeliveredStatus = asyncHandler(async(req, res) => {
+    const order = await Order.findById(req.params.id)
+
+    if (order) {
+        order.isDelivered = true
+        order.deliveredAt = Date.now()
+        
+        const updatedOrder = await order.save()
+        res.json(updatedOrder)
+    } else {
+        res.status(404)
+        throw new Error('Order not found')
+    }
+})
+
 //  @desc   Get recent user orders
 //  @route  GET /api/orders/myorders
 //  @access protected
 const getMyOrders = asyncHandler(async(req, res) => {
     const orders = await Order.find({ user: req.user._id })
-
-    // if (order) {
-    //     order.isPaid = true
-    //     order.paidAt = Date.now()
-    //     order.paymentResult = {
-    //         id: req.body.id,
-    //         status: req.body.status,
-    //         update_time: req.body.update_time,
-    //         email_address: req.body.payer.email_address
-    //     }
-
-        //const updatedOrder = await order.save()
-        res.json(orders)
-    // } else {
-    //     res.status(404)
-    //     throw new Error('Order not found')
-    // }
+    res.json(orders)
 })
 
-export {addOrderItems, getOrderById, updateOrderPaidStatus, getMyOrders}
+//  @desc   Get all orders
+//  @route  GET /api/orders
+//  @access protected
+const getOrders = asyncHandler(async(req, res) => {
+    const orders = await Order.find({}).populate('user', 'id name')
+    res.json(orders)
+})
+
+export {addOrderItems, getOrderById, updateOrderPaidStatus, getMyOrders, getOrders, updateOrderDeliveredStatus}
