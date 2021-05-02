@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
